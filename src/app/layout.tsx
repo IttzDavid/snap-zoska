@@ -1,6 +1,8 @@
+// src/app/layout.tsx
+
 import type { Metadata } from "next";
 import "./globals.css";
-
+import Navbar from '../components/Navbar'; // Update import to Navbar
 
 export const metadata: Metadata = {
   title: "David IG",
@@ -14,8 +16,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="sk">
-      <body >
+      <body style={{ paddingBottom: '56px' }}> {/* Padding for Navbar */}
         {children}
+        <Navbar /> {/* Include the Navbar */}
       </body>
     </html>
   );
