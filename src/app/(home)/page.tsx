@@ -8,7 +8,6 @@ export const metadata = { title : 'Domov | David IG'};
 
 export default function Home() {
 
-  
   return (
 
       <Typography> Domovská stránka</Typography>
