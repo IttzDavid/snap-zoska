@@ -1,5 +1,5 @@
 
-// src/app/hladanie/page.tsx
+// src/app/hladat/page.tsx
 
 
 import Typography from "@mui/material/Typography";
@@ -11,7 +11,7 @@ export default function Search() {
 
   return (
     <Container>
-        <Typography> Hľadanie </Typography>
+        <Typography> Hľadať </Typography>
     </Container>    
   );
 }
