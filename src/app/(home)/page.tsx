@@ -10,7 +10,7 @@ export default function Home() {
 
   return (
 
-      <Typography> Domovská stránka</Typography>
+      <Typography> Domovská sstránka</Typography>
 
   );
 }
