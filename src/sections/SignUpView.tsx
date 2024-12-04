@@ -1,18 +1,13 @@
-// src/sections/SignUpView.tsx
-
 "use client";
 
 import {
   Button,
-  Checkbox,
   Container,
-  FormControlLabel,
-  TextField,
   Typography,
-  Divider,
 } from "@mui/material";
 import { signIn } from "next-auth/react";
 import GoogleIcon from "@mui/icons-material/Google";
+import GitHubIcon from "@mui/icons-material/GitHub"; // GitHub icon
 
 export default function SignUpView() {
   return (
@@ -50,7 +45,26 @@ export default function SignUpView() {
         Registrovať sa účtom Google
       </Button>
 
-
+      {/* GitHub Sign Up - Iconic button */}
+      <Button
+        variant="contained"
+        fullWidth
+        startIcon={<GitHubIcon />} // GitHub icon
+        onClick={() => {
+          // Placeholder function, replace with GitHub sign-up logic tomorrow
+          console.log("GitHub sign-up (dummy) clicked");
+        }}
+        sx={{
+          mb: 1,
+          bgcolor: "#333", // Dark background similar to GitHub's color
+          color: "white", // White text color
+          '&:hover': {
+            bgcolor: "#444", // Darker shade for hover effect
+          },
+        }}
+      >
+      GitHub
+      </Button>
     </Container>
   );
 }
