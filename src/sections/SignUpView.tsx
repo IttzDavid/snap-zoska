@@ -5,8 +5,10 @@ import { Button, Container, Typography, Checkbox, FormControlLabel, Link } from 
 import { signIn } from "next-auth/react";
 import GoogleIcon from "@mui/icons-material/Google";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import { useRouter } from "next/navigation";
 
 export default function SignUpView() {
+  const router = useRouter();
   const [isChecked, setIsChecked] = useState(false);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +45,11 @@ export default function SignUpView() {
       {/* Sign-in link */}
       <Typography variant="body1" sx={{ mb: 4 }}>
         Už máte účet?{" "}
-        <Link href="/auth/prihlasenie">
+        <Link
+          component="button"
+          onClick={() => router.push("/auth/prihlasenie")}
+          sx={{ cursor: "pointer" }}
+        >
           Prihláste sa
         </Link>
       </Typography>
@@ -60,11 +66,19 @@ export default function SignUpView() {
         label={
           <Typography variant="body2">
             Súhlasím s{" "}
-            <Link href="/gdpr">
+            <Link
+              component="button"
+              onClick={() => router.push("/gdpr")} // Navigate to GDPR page
+              sx={{ cursor: "pointer" }}
+            >
               GDPR
             </Link>{" "}
             a{" "}
-            <Link href="/podmienky">
+            <Link
+              component="button"
+              onClick={() => router.push("/podmienky")} // Navigate to Terms page
+              sx={{ cursor: "pointer" }}
+            >
               podmienkami používania
             </Link>.
           </Typography>
@@ -98,7 +112,7 @@ export default function SignUpView() {
           },
         }}
       >
-        Prihlásiť sa účtom GitHub
+        Registrovať sa účtom GitHub
       </Button>
     </Container>
   );

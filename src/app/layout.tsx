@@ -11,20 +11,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
+    <ThemeProvider>
     <html lang="sk">
       <body>
         {/* Wrap the app in AuthProvider and ThemeProvider for session and theme management */}
         <AuthProvider>
-          <ThemeProvider>
             <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
               <main style={{ flexGrow: 1 }}>
                 {children} {/* Render child layouts or pages */}
               </main>
             </div>
             <Navbar /> {/* Display Navbar at the bottom of every page */}
-          </ThemeProvider>
         </AuthProvider>
       </body>
     </html>
+  </ThemeProvider>
   );
 }

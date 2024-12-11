@@ -7,10 +7,13 @@ import {
   Link,
 } from "@mui/material";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import GoogleIcon from "@mui/icons-material/Google";
 import GitHubIcon from "@mui/icons-material/GitHub"; // GitHub icon
 
 export default function SignInView() {
+  const router = useRouter();
+
   return (
     <Container
       maxWidth="xs"
@@ -32,7 +35,11 @@ export default function SignInView() {
 
       <Typography variant="body1" sx={{ mb: 6 }}>
         Nemáte účet?{" "}
-        <Link href="/auth/registracia">
+        <Link
+          component="button"
+          onClick={() => router.push("/auth/registracia")}
+          sx={{ cursor: "pointer" }}
+        >
           <span>Registrujte sa</span>
         </Link>
       </Typography>
