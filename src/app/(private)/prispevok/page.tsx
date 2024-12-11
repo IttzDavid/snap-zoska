@@ -1,5 +1,4 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../api/auth/[...nextauth]/authOptions";
+
 import { prisma } from "@/app/api/auth/[...nextauth]/prisma"; // Use PrismaClient instance
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -12,7 +11,6 @@ import Avatar from "@mui/material/Avatar";
 export const metadata = { title: "Príspevky | SnapZoška" };
 
 export default async function FeedPage() {
-  const session = await getServerSession(authOptions);
 
   // Fetch posts from the database, including user details
   const posts = await prisma.post.findMany({

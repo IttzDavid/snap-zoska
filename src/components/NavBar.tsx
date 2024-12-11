@@ -5,6 +5,7 @@ import { BottomNavigation, BottomNavigationAction, Box, Avatar, IconButton } fro
 import HomeIcon from "@mui/icons-material/Home";
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import LoginIcon from "@mui/icons-material/Login";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -28,7 +29,7 @@ export default function Navbar() {
   // Non-authenticated navigation paths
   const nonAuthPaths = [
     { label: "Domov", value: "/", icon: <HomeIcon /> },
-    { label: "Prispevky", value: "/prispevok", icon: <AddCircleIcon /> },
+    { label: "O nás", value: "../o-nas", icon: < InfoOutlinedIcon/> },
     { label: "Registrácia", value: "/auth/registracia", icon: <AppRegistrationIcon /> },
     { label: "Prihlásenie", value: "/auth/prihlasenie", icon: <LoginIcon /> },
   ];

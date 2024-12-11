@@ -1,9 +1,10 @@
-"use client";
+"use client"; // Client-side only component
 
 import {
   Button,
   Container,
   Typography,
+  Link,
 } from "@mui/material";
 import { signIn } from "next-auth/react";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -30,7 +31,10 @@ export default function SignInView() {
       </Typography>
 
       <Typography variant="body1" sx={{ mb: 6 }}>
-        Nemáte účet? <a href="/auth/registracia">Registrujte sa</a>
+        Nemáte účet?{" "}
+        <Link href="/auth/registracia">
+          <span>Registrujte sa</span>
+        </Link>
       </Typography>
 
       {/* Google Sign In */}
@@ -62,7 +66,7 @@ export default function SignInView() {
           },
         }}
       >
-        GitHub
+        Prihlásiť sa účtom GitHub
       </Button>
     </Container>
   );

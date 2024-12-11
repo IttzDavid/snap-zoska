@@ -1,15 +1,26 @@
-"use client";
+"use client"; // Client-side only component
 
-import {
-  Button,
-  Container,
-  Typography,
-} from "@mui/material";
+import React, { useState } from "react";
+import { Button, Container, Typography, Checkbox, FormControlLabel, Link } from "@mui/material";
 import { signIn } from "next-auth/react";
 import GoogleIcon from "@mui/icons-material/Google";
-import GitHubIcon from "@mui/icons-material/GitHub"; // GitHub icon
+import GitHubIcon from "@mui/icons-material/GitHub";
 
 export default function SignUpView() {
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsChecked(event.target.checked);
+  };
+
+  const handleSignUp = (provider: string) => {
+    if (!isChecked) {
+      alert("Pre pokračovanie musíte súhlasiť s podmienkami používania a GDPR.");
+      return;
+    }
+    signIn(provider);
+  };
+
   return (
     <Container
       maxWidth="xs"
@@ -30,40 +41,64 @@ export default function SignUpView() {
       </Typography>
 
       {/* Sign-in link */}
-      <Typography variant="body1" sx={{ mb: 6 }}>
-        Už máte účet? <a href="/auth/prihlasenie">Prihláste sa</a>
+      <Typography variant="body1" sx={{ mb: 4 }}>
+        Už máte účet?{" "}
+        <Link href="/auth/prihlasenie">
+          Prihláste sa
+        </Link>
       </Typography>
+
+      {/* Terms and GDPR Checkbox */}
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={isChecked}
+            onChange={handleCheckboxChange}
+            color="primary"
+          />
+        }
+        label={
+          <Typography variant="body2">
+            Súhlasím s{" "}
+            <Link href="/gdpr">
+              GDPR
+            </Link>{" "}
+            a{" "}
+            <Link href="/podmienky">
+              podmienkami používania
+            </Link>.
+          </Typography>
+        }
+        sx={{ mb: 3 }}
+      />
 
       {/* Google Sign Up */}
       <Button
         variant="outlined"
         fullWidth
         startIcon={<GoogleIcon />}
-        onClick={() => signIn("google")}
+        onClick={() => handleSignUp("google")}
         sx={{ mb: 1 }}
       >
         Registrovať sa účtom Google
       </Button>
 
-      {/* GitHub Sign Up - Iconic button */}
+      {/* GitHub Sign Up */}
       <Button
         variant="contained"
         fullWidth
-        startIcon={<GitHubIcon />} // GitHub icon
-        onClick={() => {
-          // Placeholder function, replace with GitHub sign-up logic tomorrow
-          console.log("GitHub sign-up (dummy) clicked");
-        }}
+        startIcon={<GitHubIcon />}
+        onClick={() => handleSignUp("github")}
         sx={{
           mb: 1,
-          bgcolor: "#333", // Dark background similar to GitHub's color
-          color: "white", // White text color
-          '&:hover': {
-            bgcolor: "#444", // Darker shade for hover effect
+          bgcolor: "#333",
+          color: "white",
+          "&:hover": {
+            bgcolor: "#444",
           },
         }}
       >
-      GitHub
+        Prihlásiť sa účtom GitHub
       </Button>
     </Container>
   );
