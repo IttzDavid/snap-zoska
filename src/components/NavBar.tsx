@@ -29,7 +29,7 @@ export default function Navbar() {
   // Non-authenticated navigation paths
   const nonAuthPaths = [
     { label: "Domov", value: "/", icon: <HomeIcon /> },
-    { label: "O nás", value: "../o-nas", icon: < InfoOutlinedIcon/> },
+    { label: "O nás", value: "../o-nas", icon: <InfoOutlinedIcon /> },
     { label: "Registrácia", value: "/auth/registracia", icon: <AppRegistrationIcon /> },
     { label: "Prihlásenie", value: "/auth/prihlasenie", icon: <LoginIcon /> },
   ];
@@ -50,6 +50,11 @@ export default function Navbar() {
     },
     { label: "Odhlásiť", value: "/auth/odhlasenie", icon: <LogoutIcon /> },
   ];
+
+  // Check session status
+  if (status === "loading") {
+    return <div>Loading...</div>; // You can replace this with a loading spinner or something else
+  }
 
   // Decide which paths to use based on authentication status
   const navigationPaths = status === "authenticated" ? authPaths : nonAuthPaths;

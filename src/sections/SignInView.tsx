@@ -9,7 +9,7 @@ import {
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import GoogleIcon from "@mui/icons-material/Google";
-import GitHubIcon from "@mui/icons-material/GitHub"; // GitHub icon
+import GitHubIcon from "@mui/icons-material/GitHub";
 
 export default function SignInView() {
   const router = useRouter();
@@ -55,21 +55,18 @@ export default function SignInView() {
         Prihlásiť sa účtom Google
       </Button>
 
-      {/* GitHub Sign In - Iconic button */}
+      {/* GitHub Sign In */}
       <Button
         variant="contained"
         fullWidth
-        startIcon={<GitHubIcon />} // GitHub icon
-        onClick={() => {
-          // Placeholder function, replace with GitHub sign-in logic tomorrow
-          console.log("GitHub sign-in (dummy) clicked");
-        }}
+        startIcon={<GitHubIcon />}
+        onClick={() => signIn("github")} // GitHub sign-in logic
         sx={{
           mb: 1,
-          bgcolor: "#333", // Dark background similar to GitHub's color
-          color: "white", // White text color
+          bgcolor: "#333",
+          color: "white",
           '&:hover': {
-            bgcolor: "#444", // Darker shade for hover effect
+            bgcolor: "#444",
           },
         }}
       >
