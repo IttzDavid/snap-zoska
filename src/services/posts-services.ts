@@ -24,17 +24,17 @@ export const createPost = async (imageUrl: string, caption: string, userId: stri
   
 
 // Function to fetch all posts, including user details
-export const getPosts = async (): Promise<Post[]> => {
+export const getPosts = async (): Promise<(Post & { user: { name: string | null; image: string | null } })[]> => {
   try {
     const posts = await prisma.post.findMany({
-      orderBy: {
-        createdAt: "desc", // Sort by most recent post
-      },
+      orderBy: { createdAt: "desc" },
       include: {
-        user: true, // Include related user data
+        user: { // Ensure user data is included
+          select: { name: true, image: true }, // Only select necessary fields
+        },
       },
     });
-    return posts; // Return all posts
+    return posts;
   } catch (error) {
     throw new Error("Failed to fetch posts: " + (error as Error).message);
   }
