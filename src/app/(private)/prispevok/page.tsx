@@ -1,4 +1,3 @@
-
 import { prisma } from "@/app/api/auth/[...nextauth]/prisma"; // Use PrismaClient instance
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -11,7 +10,6 @@ import Avatar from "@mui/material/Avatar";
 export const metadata = { title: "Príspevky | SnapZoška" };
 
 export default async function FeedPage() {
-
   // Fetch posts from the database, including user details
   const posts = await prisma.post.findMany({
     orderBy: { createdAt: "desc" },
@@ -34,12 +32,21 @@ export default async function FeedPage() {
               />
               <Typography variant="subtitle1">{post.user.name}</Typography>
             </Box>
-            <CardMedia
-              component="img"
-              height="300"
-              image={post.imageUrl}
-              alt={post.caption || "Post image"}
-            />
+
+            {/* Box wrapper to maintain aspect ratio */}
+            <Box sx={{ width: "100%", aspectRatio: "16/9", overflow: "hidden" }}>
+              <CardMedia
+                component="img"
+                image={post.imageUrl}
+                alt={post.caption || "Post image"}
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain", // Ensures the whole image is visible
+                }}
+              />
+            </Box>
+
             <CardContent>
               <Typography variant="body1" sx={{ mb: 1 }}>
                 {post.caption || "Bez popisu"}

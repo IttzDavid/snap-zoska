@@ -27,7 +27,8 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Post      Post[]
+  posts     Post[]
+  profile   Profile?
 }
 
 model Account {
@@ -93,4 +94,17 @@ model Post {
   caption   String? // Optional caption for the post
   createdAt DateTime @default(now()) // Timestamp for when the post was created
   updatedAt DateTime @updatedAt // Timestamp for when the post was last updated
+}
+
+model Profile {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  bio       String?
+  avatarUrl String?
+  location  String?
+  interests String[] @default([])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
