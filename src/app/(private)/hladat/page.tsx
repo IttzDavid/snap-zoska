@@ -1,17 +1,30 @@
+// src/app/hladanie/page.tsx
 
-// src/app/hladat/page.tsx
+import { Container } from "@mui/material";
+import SearchView from "@/sections/SearchView"
+import { prisma } from "@/app/api/auth/[...nextauth]/prisma";
 
+export const metadata = { title: "Hľadanie | ZoškaSnap" };
 
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
+export default async function SearchPage() {
+  const users = await prisma.user.findMany({
+      select: {
+          id: true,
+          name: true,  // name can be null
+          image: true, // include image if needed
+      },
+  });
 
-export const metadata = { title : 'Hľadanie | David IG'};
-
-export default function Search() {
+  // Ensure 'name' is always a string (replace null with an empty string)
+  const formattedUsers = users.map(user => ({
+      id: user.id,
+      name: user.name ?? "Unknown User", // Replace null with default text
+      image: user.image ?? "", // Ensure image is a string
+  }));
 
   return (
-    <Container>
-        <Typography> Hľadať </Typography>
-    </Container>    
+      <Container>
+        <SearchView users={formattedUsers} />
+      </Container>
   );
 }

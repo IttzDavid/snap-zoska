@@ -1,64 +1,75 @@
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import Avatar from "@mui/material/Avatar";
-import { Post } from "@prisma/client";
+// src/app/(private)/prispevok/page.tsx
 
-interface PostsViewProps {
-  posts: (Post & { user: { name: string | null; image: string | null } })[];
-}
+import NextLink from "next/link";
 
-export default function PostsView({ posts }: PostsViewProps) {
+import { Link as MuiLink } from "@mui/material";
+import { Container, Typography, Box } from "@mui/material";
+
+import { prisma } from "@/app/api/auth/[...nextauth]/prisma";
+import { Post } from "@/types/post";
+import PostCard from "@/sections/post/PostCard";
+
+export const metadata = { title: "Feed | Echo" };
+
+export default async function FeedPage() {
+  const posts: Post[] = await prisma.post.findMany({
+    orderBy: { createdAt: "desc" },
+    include: { user: true, images: true, likes: true },
+  });
+
   return (
-    <Container>
-      <Typography variant="h4" sx={{ mb: 3 }}>
+    <Container sx={{ mt: 5 }}>
+      <Typography
+        variant="h4"
+        sx={{
+          mb: 4,
+          fontWeight: "bold",
+          textAlign: "center",
+          color: "primary.main",
+        }}>
         Príspevky
       </Typography>
+
       {posts.length > 0 ? (
-        posts.map((post) => (
-          <Card key={post.id} sx={{ mb: 3 }}>
-            <Box sx={{ display: "flex", alignItems: "center", p: 2 }}>
-              <Avatar
-                alt={post.user.name || "User"}
-                src={post.user.image || ""}
-                sx={{ mr: 2 }}
-              />
-              <Typography variant="subtitle1">{post.user.name}</Typography>
-            </Box>
-
-            {/* Box wrapper to maintain aspect ratio */}
-            <Box sx={{ width: "100%", aspectRatio: "16/9", overflow: "hidden" }}>
-              <CardMedia
-                component="img"
-                image={post.imageUrl}
-                alt={post.caption || "Post image"}
-                sx={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "contain", // Ensures the whole image is visible
-                }}
-              />
-            </Box>
-
-            <CardContent>
-              <Typography variant="body1" sx={{ mb: 1 }}>
-                {post.caption || "Bez popisu"}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                sx={{ fontSize: "0.8rem" }}
-              >
-                Publikované: {new Date(post.createdAt).toLocaleString("sk-SK")}
-              </Typography>
-            </CardContent>
-          </Card>
-        ))
+        posts.map((post) => {
+          if (!post.user.name) {
+            return null; // Skip posts with null user.name
+          }
+          return (
+            <PostCard
+              key={post.id}
+              post={post}
+            />
+          );
+        }) // Každý príspevok je zobrazený pomocou PostCard
       ) : (
-        <Typography variant="body1">Žiadne príspevky na zobrazenie.</Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}>
+          <Typography
+            variant="h6"
+            sx={{
+              mb: 2,
+              fontWeight: "bold",
+              textAlign: "center",
+              color: "text.secondary",
+            }}>
+            Žiadne príspevky na zobrazenie.
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{ textAlign: "center", color: "text.primary" }}>
+            Buďte prvý, kto zdieľa príspevok!{" "}
+            <MuiLink
+              component={NextLink}
+              href="/new-post">
+              Create a new post
+            </MuiLink>
+          </Typography>
+        </Box>
       )}
     </Container>
   );

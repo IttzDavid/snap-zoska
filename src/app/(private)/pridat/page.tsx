@@ -3,7 +3,7 @@
 
 import AddPostView from "@/sections/AddPostView";
 
-export const metadata = { title : 'Pridať | David IG'};
+export const metadata = { title : 'Pridať | ZoškaSnap'};
 
 export default function Add() {
 
