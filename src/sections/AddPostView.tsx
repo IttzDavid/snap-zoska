@@ -1,9 +1,7 @@
-// src/components/NewPostForm.tsx
-
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // Import useRouter
+import { useRouter } from "next/navigation";
 import { getSession } from "next-auth/react";
 import {
   Button,
@@ -79,117 +77,126 @@ export default function NewPostForm() {
 
   return (
     <Box
-      component="form"
-      onSubmit={handleSubmit}
       sx={{
+        minHeight: "100vh",
         display: "flex",
-        flexDirection: "column",
-        gap: 3,
-        maxWidth: 500,
-        margin: "0 auto",
-        padding: 3,
-        borderRadius: 2,
-        boxShadow: 3,
-        border: "2px solid #e0e0e0",
-        backgroundColor: "background.paper",
-      }}>
-      {/* Nahrávanie obrázkov */}
-      <Box>
-        <label htmlFor="images">
-          <Button
-            variant="outlined"
-            component="span"
-            fullWidth
-            sx={{
-              padding: "10px",
-              backgroundColor: "white",
-              color: "black",
-              borderRadius: 2,
-              "&:hover": {
-                backgroundColor: "primary.light",
-              },
-            }}>
-            Upload Images
-          </Button>
-        </label>
-        <Input
-          type="file"
-          id="images"
-          inputProps={{ multiple: true }}
-          onChange={handleImageChange}
-          sx={{ display: "none" }}
-        />
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "background.default",
+        padding: 2,
+      }}
+    >
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 3,
+          width: "100%",
+          maxWidth: 500,
+          padding: 3,
+          borderRadius: 2,
+          boxShadow: 3,
+          border: "2px solid #e0e0e0",
+          backgroundColor: "background.paper",
+        }}
+      >
+        {/* Nahrávanie obrázkov */}
+        <Box>
+          <label htmlFor="images">
+            <Button
+              variant="outlined"
+              component="span"
+              fullWidth
+              sx={{
+                padding: "10px",
+                backgroundColor: "white",
+                color: "black",
+                borderRadius: 2,
+                "&:hover": {
+                  backgroundColor: "primary.light",
+                },
+              }}
+            >
+              Upload Images
+            </Button>
+          </label>
+          <Input
+            type="file"
+            id="images"
+            inputProps={{ multiple: true }}
+            onChange={handleImageChange}
+            sx={{ display: "none" }}
+          />
+          {images.length > 0 && (
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              sx={{ marginTop: 1 }}
+            >
+              {images.length} image(s) selected.
+            </Typography>
+          )}
+        </Box>
+
+        {/* Zobrazenie náhľadov obrázkov */}
         {images.length > 0 && (
+          <Grid container spacing={2}>
+            {images.map((image, index) => (
+              <Grid item xs={4} key={index}>
+                <Card>
+                  <CardMedia
+                    component="img"
+                    image={URL.createObjectURL(image)}
+                    alt={`Image ${index + 1}`}
+                    sx={{ width: "100%", height: 120, objectFit: "cover" }}
+                  />
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        )}
+
+        {/* Caption */}
+        <TextField
+          label="Caption"
+          value={caption}
+          onChange={(e) => setCaption(e.target.value)}
+          placeholder="Write your caption here..."
+          multiline
+          rows={4}
+          fullWidth
+          variant="outlined"
+          sx={{ borderRadius: 2 }}
+        />
+
+        {/* Submit button */}
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          sx={{
+            padding: "12px",
+            borderRadius: 2,
+            fontWeight: 600,
+          }}
+          disabled={loading}
+        >
+          {loading ? "Submitting..." : "Create Post"}
+        </Button>
+
+        {/* Error message */}
+        {error && (
           <Typography
             variant="body2"
-            color="textSecondary"
-            sx={{ marginTop: 1 }}>
-            {images.length} image(s) selected.
+            color="error"
+            sx={{ textAlign: "center", marginTop: 1 }}
+          >
+            {error}
           </Typography>
         )}
       </Box>
-
-      {/* Zobrazenie náhľadov obrázkov */}
-      {images.length > 0 && (
-        <Grid
-          container
-          spacing={2}
-          sx={{ marginTop: 2 }}>
-          {images.map((image, index) => (
-            <Grid
-              item
-              xs={4}
-              key={index}>
-              <Card>
-                <CardMedia
-                  component="img"
-                  image={URL.createObjectURL(image)}
-                  alt={`Image ${index + 1}`}
-                  sx={{ width: "100%", height: 120, objectFit: "cover" }}
-                />
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      )}
-
-      {/* Caption */}
-      <TextField
-        label="Caption"
-        value={caption}
-        onChange={(e) => setCaption(e.target.value)}
-        placeholder="Write your caption here..."
-        multiline
-        rows={4}
-        fullWidth
-        variant="outlined"
-        sx={{ borderRadius: 2 }}
-      />
-
-      {/* Submit button */}
-      <Button
-        type="submit"
-        variant="contained"
-        color="primary"
-        sx={{
-          padding: "12px",
-          borderRadius: 2,
-          marginTop: 2,
-          fontWeight: 600,
-        }}
-        disabled={loading}>
-        {loading ? "Submitting..." : "Create Post"}
-      </Button>
-
-      {/* Error message */}
-      {error && (
-        <Typography
-          variant="body2"
-          color="error"
-          sx={{ textAlign: "center", marginTop: 2 }}>
-          {error}
-        </Typography>
-      )}
     </Box>
   );
 }

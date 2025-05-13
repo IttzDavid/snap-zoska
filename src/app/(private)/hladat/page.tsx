@@ -1,30 +1,38 @@
 // src/app/hladanie/page.tsx
 
+export const dynamic = "force-dynamic";
+
 import { Container } from "@mui/material";
-import SearchView from "@/sections/SearchView"
+import SearchView from "@/sections/SearchView";
 import { prisma } from "@/app/api/auth/[...nextauth]/prisma";
 
 export const metadata = { title: "Hľadanie | ZoškaSnap" };
 
 export default async function SearchPage() {
   const users = await prisma.user.findMany({
-      select: {
-          id: true,
-          name: true,  // name can be null
-          image: true, // include image if needed
+    select: {
+      id: true,
+      name: true,   // may be null
+      image: true,  // provider image
+      profile: {
+        select: {
+          avatarUrl: true,  // your custom profile pic
+        },
       },
+    },
   });
 
-  // Ensure 'name' is always a string (replace null with an empty string)
+  // Normalize fields and pull avatarUrl out of profile
   const formattedUsers = users.map(user => ({
-      id: user.id,
-      name: user.name ?? "Unknown User", // Replace null with default text
-      image: user.image ?? "", // Ensure image is a string
+    id: user.id,
+    name: user.name ?? "Unknown User",
+    image: user.image ?? "",
+    avatarUrl: user.profile?.avatarUrl ?? null,
   }));
 
   return (
-      <Container>
-        <SearchView users={formattedUsers} />
-      </Container>
+    <Container>
+      <SearchView users={formattedUsers} />
+    </Container>
   );
 }

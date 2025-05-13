@@ -2,17 +2,38 @@
 
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation"; // Import useRouter
+import { useState, ChangeEvent } from "react";
+import { useRouter } from "next/navigation";
 import { getSession } from "next-auth/react";
-import { Button, TextField, Box, Typography } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Box,
+  Typography,
+  Avatar,
+  CircularProgress,
+} from "@mui/material";
 
 export default function NewProfileForm() {
   const [bio, setBio] = useState<string>("");
   const [location, setLocation] = useState<string>("");
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setAvatarFile(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => setAvatarPreview(reader.result as string);
+      reader.readAsDataURL(file);
+    } else {
+      setAvatarPreview("");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,10 +49,12 @@ export default function NewProfileForm() {
       }
 
       const formData = new FormData();
+      formData.append("userId", session.user.id);
       formData.append("bio", bio);
       formData.append("location", location);
-      formData.append("userId", session.user.id);
-      formData.append("image", session.user.image || ""); // Optional image field
+      if (avatarFile) {
+        formData.append("avatar", avatarFile);
+      }
 
       const response = await fetch("/api/profile", {
         method: "POST",
@@ -40,7 +63,7 @@ export default function NewProfileForm() {
 
       const data = await response.json();
       if (response.ok) {
-        router.push(`/profil/${session.user.id}`); // Redirect to the profile page
+        router.push(`/profil/${session.user.id}`);
       } else {
         setError(data.message || "Failed to create profile.");
       }
@@ -56,20 +79,31 @@ export default function NewProfileForm() {
     <Box
       component="form"
       onSubmit={handleSubmit}
-      sx={{ maxWidth: 600, margin: "0 auto", padding: 2 }}>
-      <Typography
-        variant="h4"
-        gutterBottom>
+      encType="multipart/form-data"
+      sx={{ maxWidth: 600, margin: "0 auto", padding: 2 }}
+    >
+      <Typography variant="h4" gutterBottom>
         Create Profile
       </Typography>
       {error && (
-        <Typography
-          color="error"
-          variant="body2"
-          gutterBottom>
+        <Typography color="error" variant="body2" gutterBottom>
           {error}
         </Typography>
       )}
+
+      <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
+        <Avatar src={avatarPreview} sx={{ width: 64, height: 64 }} />
+        <Button variant="outlined" component="label">
+          Upload Avatar
+          <input
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={handleFileChange}
+          />
+        </Button>
+      </Box>
+
       <TextField
         label="Bio"
         value={bio}
@@ -90,8 +124,10 @@ export default function NewProfileForm() {
         type="submit"
         variant="contained"
         color="primary"
-        disabled={loading}>
-        {loading ? "Creating..." : "Create Profile"}
+        disabled={loading}
+        sx={{ marginTop: 2 }}
+      >
+        {loading ? <CircularProgress size={24} /> : "Create Profile"}
       </Button>
     </Box>
   );

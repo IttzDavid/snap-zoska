@@ -1,6 +1,8 @@
 // src/app/profil/page.tsx
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useEffect, useState } from "react";
 import { Box, Typography, Avatar, CircularProgress } from "@mui/material";
 
@@ -8,7 +10,8 @@ interface UserProfile {
   id: string;
   name: string | null;
   email: string;
-  image: string | null;
+  image: string | null;       // provider image
+  avatarUrl: string | null;   // your custom profile pic
   emailVerified: Date | null;
   createdAt: Date;
   updatedAt: Date;
@@ -22,12 +25,11 @@ const ProfileView = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch("/api/profile");
-        if (!res.ok) {
-          throw new Error("Failed to fetch profile");
-        }
+        const res = await fetch("/api/profile", { method: "GET" });
+        if (!res.ok) throw new Error("Failed to fetch profile");
         const data = await res.json();
-        setUserProfile(data);
+        // adjust if your API returns `{ profile: {...} }`
+        setUserProfile(data.profile ?? data);
       } catch (err) {
         setError((err as Error).message);
       } finally {
@@ -38,30 +40,39 @@ const ProfileView = () => {
     fetchProfile();
   }, []);
 
-  if (loading) {
-    return <CircularProgress />;
+  if (loading) return <CircularProgress />;
+  if (error)  return <Typography color="error">{error}</Typography>;
+
+  if (!userProfile) {
+    return <Typography>No profile data</Typography>;
   }
 
-  if (error) {
-    return <Typography color="error">{error}</Typography>;
-  }
+  // pick src in priority: avatarUrl → provider image → empty
+  const src = userProfile.avatarUrl || "";
+
+  // get initials fallback
+  const initials = (userProfile.name ?? userProfile.email.split("@")[0])
+    .split(" ")
+    .map((w) => w[0])
+    .join("");
 
   return (
-    <Box sx={{ textAlign: "center" }}>
-      {userProfile && (
-        <>
-          <Avatar
-            alt={userProfile.name || "User"}
-            src={userProfile.image || ""}
-            sx={{ width: 100, height: 100, marginBottom: 2 }}
-          />
-          <Typography variant="h5">{userProfile.name || "No name"}</Typography>
-          <Typography variant="body1">{userProfile.email}</Typography>
-          <Typography variant="body2" color="textSecondary">
-            Member since {userProfile.createdAt.toLocaleDateString()}
-          </Typography>
-        </>
-      )}
+    <Box sx={{ textAlign: "center", mt: 4 }}>
+      <Avatar
+        alt={userProfile.name || "User"}
+        src={src}
+        sx={{ width: 100, height: 100, mb: 2, mx: "auto" }}
+      >
+        {initials}
+      </Avatar>
+
+      <Typography variant="h5">
+        {userProfile.name || "No name"}
+      </Typography>
+      <Typography variant="body1">{userProfile.email}</Typography>
+      <Typography variant="body2" color="textSecondary">
+        Member since {userProfile.createdAt.toLocaleDateString()}
+      </Typography>
     </Box>
   );
 };

@@ -1,4 +1,5 @@
 // src/app/(private)/layout.tsx
+export const dynamic = "force-dynamic";
 
 import AuthGuard from "@/components/AuthGuard";
 
