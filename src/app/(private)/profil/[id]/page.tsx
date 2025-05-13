@@ -35,7 +35,11 @@ export default async function ProfileDetails({
   const posts: Post[] = await prisma.post.findMany({
     orderBy: { createdAt: "desc" },
     where: { userId: id },
-    include: { user: true, images: true, likes: true },
+    include: { user: true, images: true, likes: true, comments: { 
+      include: {
+        user: true, // Include user information with each comment
+      } 
+    }, },
   });
 
   if (!user?.profile) {

@@ -14,7 +14,11 @@ export const metadata = { title: "Feed | Echo" };
 export default async function FeedPage() {
   const posts: Post[] = await prisma.post.findMany({
     orderBy: { createdAt: "desc" },
-    include: { user: true, images: true, likes: true },
+    include: { user: true, images: true, likes: true, comments: { 
+      include: {
+        user: true, // Include user information with each comment
+      } 
+    }, },
   });
 
   return (
@@ -39,6 +43,7 @@ export default async function FeedPage() {
             <PostCard
               key={post.id}
               post={post}
+              commentCount={post.comments.length}
             />
           );
         }) // Každý príspevok je zobrazený pomocou PostCard

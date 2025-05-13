@@ -1,5 +1,4 @@
 // npx prisma format
-// npx prisma migrate dev --name nove_tabulky_pridane
 // npx prisma generate
 // npx prisma studio
 
