@@ -49,12 +49,27 @@ export const lightTheme = createTheme({
     MuiLink: {
       styleOverrides: {
         root: {
-          color: '#f50057', // pink color for links
+          color: 'transparent', // Make text transparent to show the gradient
           textDecoration: 'none', // No underline by default
           fontStyle: 'italic', // Cursive style for links
+          background: 'linear-gradient(to right, #f50057, #ff80ab)', // Gradient text color
+          WebkitBackgroundClip: 'text', // Clip the background to the text
           '&:hover': {
             textDecoration: 'underline', // Underline on hover
-            color: '#f50057', // Darker shade of blue on hover
+            color: 'transparent', // Keep text transparent
+            background: 'linear-gradient(to right, #f50057, #ff80ab)', // Hover gradient
+            WebkitBackgroundClip: 'text', // Clip the background to the text
+          },
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          background: 'linear-gradient(to right, #f50057, #ff80ab)', // Gradient from primary to a lighter pink
+          color: '#fff', // Button text color
+          '&:hover': {
+            background: 'linear-gradient(to right, #ff4081, #f50057)', // Hover gradient
           },
         },
       },
@@ -74,12 +89,30 @@ export const darkTheme = createTheme({
     MuiLink: {
       styleOverrides: {
         root: {
-          color: '#ff4081', // Light pink color for links in dark mode
+          color: 'transparent', // Make text transparent to show the gradient
           textDecoration: 'none', // No underline by default
           fontStyle: 'italic', // Cursive style for links
+          background: 'linear-gradient(to right, #ff4081, #f50057)', // Gradient text color
+          WebkitBackgroundClip: 'text', // Clip the background to the text
           '&:hover': {
             textDecoration: 'underline', // Underline on hover
-            color: '#f50057', // Lighter blue shade on hover in dark mode
+            color: 'transparent', // Keep text transparent
+            background: 'linear-gradient(to right, #ff4081, #f50057)', // Hover gradient
+            WebkitBackgroundClip: 'text', // Clip the background to the text
+          },
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          // Apply only if it’s NOT a GitHub button
+          '&:not(.github-button)': {
+            background: 'linear-gradient(to right, #f50057, #ff80ab)',
+            color: '#fff',
+            '&:hover': {
+              background: 'linear-gradient(to right, #ff4081, #f50057)',
+            },
           },
         },
       },

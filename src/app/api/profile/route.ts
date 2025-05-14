@@ -6,7 +6,7 @@ import { put } from "@vercel/blob";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]/authOptions";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     // 1) Authenticate
     const session = await getServerSession(authOptions);

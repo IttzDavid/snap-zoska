@@ -12,7 +12,10 @@ import {
   Grid,
   Card,
   CardMedia,
+  CardActions,
+  IconButton,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function NewPostForm() {
   const [caption, setCaption] = useState<string>("");
@@ -70,9 +73,17 @@ export default function NewPostForm() {
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setImages(Array.from(e.target.files));
-    }
+    const fileList = e.target.files;
+    if (!fileList) return;
+  
+    const newFiles = Array.from(fileList);
+    setImages((prev) => [...prev, ...newFiles]);
+  };
+  
+  
+
+  const removeImage = (indexToRemove: number) => {
+    setImages(images.filter((_, i) => i !== indexToRemove));
   };
 
   return (
@@ -83,26 +94,32 @@ export default function NewPostForm() {
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "background.default",
-        padding: 2,
+        px: 2,
       }}
     >
       <Box
         component="form"
         onSubmit={handleSubmit}
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 3,
           width: "100%",
-          maxWidth: 500,
-          padding: 3,
-          borderRadius: 2,
-          boxShadow: 3,
-          border: "2px solid #e0e0e0",
+          maxWidth: 600,
+          p: 4,
+          borderRadius: 3,
+          boxShadow: 4,
           backgroundColor: "background.paper",
         }}
       >
-        {/* Nahrávanie obrázkov */}
+        <Typography
+          variant="h5"
+          fontWeight={700}
+          textAlign="center"
+          mb={3}
+          color="primary.main"
+        >
+          Create a New Post
+        </Typography>
+
+        {/* Upload Images Button */}
         <Box>
           <label htmlFor="images">
             <Button
@@ -110,13 +127,9 @@ export default function NewPostForm() {
               component="span"
               fullWidth
               sx={{
-                padding: "10px",
-                backgroundColor: "white",
-                color: "black",
+                py: 1.5,
                 borderRadius: 2,
-                "&:hover": {
-                  backgroundColor: "primary.light",
-                },
+                textTransform: "none",
               }}
             >
               Upload Images
@@ -132,17 +145,16 @@ export default function NewPostForm() {
           {images.length > 0 && (
             <Typography
               variant="body2"
-              color="textSecondary"
-              sx={{ marginTop: 1 }}
+              sx={{ mt: 1, color: "text.secondary" }}
             >
-              {images.length} image(s) selected.
+              {images.length} image(s) selected
             </Typography>
           )}
         </Box>
 
-        {/* Zobrazenie náhľadov obrázkov */}
+        {/* Image Previews */}
         {images.length > 0 && (
-          <Grid container spacing={2}>
+          <Grid container spacing={2} mt={2}>
             {images.map((image, index) => (
               <Grid item xs={4} key={index}>
                 <Card>
@@ -150,34 +162,43 @@ export default function NewPostForm() {
                     component="img"
                     image={URL.createObjectURL(image)}
                     alt={`Image ${index + 1}`}
-                    sx={{ width: "100%", height: 120, objectFit: "cover" }}
+                    sx={{ height: 120, objectFit: "cover" }}
                   />
+                  <CardActions sx={{ justifyContent: "flex-end", p: 0.5 }}>
+                    <IconButton
+                      size="small"
+                      onClick={() => removeImage(index)}
+                    >
+                      <DeleteIcon fontSize="small" color="error" />
+                    </IconButton>
+                  </CardActions>
                 </Card>
               </Grid>
             ))}
           </Grid>
         )}
 
-        {/* Caption */}
+        {/* Caption Field */}
         <TextField
           label="Caption"
-          value={caption}
-          onChange={(e) => setCaption(e.target.value)}
-          placeholder="Write your caption here..."
+          placeholder="Write something about your post..."
           multiline
           rows={4}
           fullWidth
-          variant="outlined"
-          sx={{ borderRadius: 2 }}
+          value={caption}
+          onChange={(e) => setCaption(e.target.value)}
+          sx={{ mt: 3 }}
         />
 
-        {/* Submit button */}
+        {/* Submit Button */}
         <Button
           type="submit"
           variant="contained"
           color="primary"
+          fullWidth
           sx={{
-            padding: "12px",
+            mt: 3,
+            py: 1.5,
             borderRadius: 2,
             fontWeight: 600,
           }}
@@ -186,12 +207,13 @@ export default function NewPostForm() {
           {loading ? "Submitting..." : "Create Post"}
         </Button>
 
-        {/* Error message */}
+        {/* Error Message */}
         {error && (
           <Typography
             variant="body2"
             color="error"
-            sx={{ textAlign: "center", marginTop: 1 }}
+            textAlign="center"
+            mt={2}
           >
             {error}
           </Typography>

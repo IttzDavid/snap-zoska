@@ -1,9 +1,6 @@
-// src/components/post/Carousel.tsx
-
 "use client";
 
 import { useState } from "react";
-
 import { Box, CardMedia, IconButton } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -13,7 +10,6 @@ interface CarouselProps {
 }
 
 export default function Carousel({ images }: CarouselProps) {
-  console.log(images);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const prevImage = () => {
@@ -38,7 +34,8 @@ export default function Carousel({ images }: CarouselProps) {
             paddingTop: "100%", // Ensures a square aspect ratio
             position: "relative",
             overflow: "hidden",
-          }}>
+          }}
+        >
           <CardMedia
             component="img"
             image={images[currentIndex]?.imageUrl}
@@ -66,11 +63,17 @@ export default function Carousel({ images }: CarouselProps) {
                   top: "50%",
                   left: "10px",
                   transform: "translateY(-50%)",
-                  backgroundColor: "rgba(255, 255, 255, 0.8)",
-                  color: "background.default",
+                  backgroundColor: "rgba(0, 0, 0, 0.6)", // Darker background for better contrast
+                  color: "white",
                   fontSize: "small",
-                  "&:hover": { backgroundColor: "rgba(255, 255, 255, 1)" },
-                }}>
+                  borderRadius: "50%",
+                  padding: "8px",
+                  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.2)",
+                  "&:hover": {
+                    backgroundColor: "rgba(0, 0, 0, 0.8)",
+                  },
+                }}
+              >
                 <ArrowBackIosIcon fontSize="small" />
               </IconButton>
             )}
@@ -82,11 +85,17 @@ export default function Carousel({ images }: CarouselProps) {
                   top: "50%",
                   right: "10px",
                   transform: "translateY(-50%)",
-                  backgroundColor: "rgba(255, 255, 255, 0.8)",
-                  color: "background.default",
+                  backgroundColor: "rgba(0, 0, 0, 0.6)", // Darker background for better contrast
+                  color: "white",
                   fontSize: "small",
-                  "&:hover": { backgroundColor: "rgba(255, 255, 255, 1)" },
-                }}>
+                  borderRadius: "50%",
+                  padding: "8px",
+                  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.2)",
+                  "&:hover": {
+                    backgroundColor: "rgba(0, 0, 0, 0.8)",
+                  },
+                }}
+              >
                 <ArrowForwardIosIcon fontSize="small" />
               </IconButton>
             )}
@@ -94,6 +103,7 @@ export default function Carousel({ images }: CarouselProps) {
         )}
       </Box>
 
+      {/* Indicator dots */}
       <Box
         sx={{
           display: "flex",
@@ -101,7 +111,8 @@ export default function Carousel({ images }: CarouselProps) {
           alignItems: "center",
           gap: "5px",
           marginTop: "10px",
-        }}>
+        }}
+      >
         {images.map((_, index) => (
           <Box
             key={index}

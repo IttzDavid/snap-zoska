@@ -1,6 +1,8 @@
 // /api/comments/[postId]/route.ts
 import { prisma } from "@/app/api/auth/[...nextauth]/prisma";
+import { UserWithProfile } from "@/types/types";
 import { NextRequest, NextResponse } from "next/server";
+
 
 export async function GET(
   req: NextRequest,
@@ -43,7 +45,7 @@ export async function GET(
   });
 
   // Flatten avatarUrl from profile to top-level user object
-  const formatUser = (user: any) => ({
+  const formatUser = (user: UserWithProfile) => ({
     ...user,
     avatarUrl: user.profile?.avatarUrl ?? null,
   });

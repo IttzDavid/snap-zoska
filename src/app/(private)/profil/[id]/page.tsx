@@ -142,20 +142,27 @@ export default async function ProfileDetails({
           <Grid container spacing={1} mt={2}>
             {posts.map((post) => (
               <Grid item xs={12} sm={6} md={4} key={post.id}>
-                <Card>
-                  {post.images.length > 0 && (
-                    <CardMedia
-                      component="img"
-                      sx={{
-                        width: "100%",
-                        aspectRatio: "1 / 1",
-                        objectFit: "cover",
-                      }}
-                      image={post.images[0].imageUrl}
-                      alt="Post image"
-                    />
-                  )}
-                </Card>
+                <Link href={`/profil/${id}/post/${post.id}`} passHref>
+                  <Card
+                    sx={{
+                      cursor: "pointer",
+                      "&:hover": { opacity: 0.85 },
+                    }}
+                  >
+                    {post.images.length > 0 && (
+                      <CardMedia
+                        component="img"
+                        sx={{
+                          width: "100%",
+                          aspectRatio: "1 / 1",
+                          objectFit: "cover",
+                        }}
+                        image={post.images[0].imageUrl}
+                        alt="Post image"
+                      />
+                    )}
+                  </Card>
+                </Link>
               </Grid>
             ))}
           </Grid>

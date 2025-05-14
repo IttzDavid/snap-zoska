@@ -1,11 +1,11 @@
 // src/app/(home)/page.tsx
 
-
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/authOptions";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
+import { Container, Typography } from "@mui/material";
+import HomeView from "@/sections/HomeView";
+
 
 export const metadata = { title: "Domov | ZoškaSnap" };
 
@@ -20,9 +20,25 @@ export default async function HomePage() {
 
   // Show the unauthenticated home view for non-authenticated users
   return (
-    <Container>
-      <Typography variant='h3'> Domovská stránka - NEprihlásený user </Typography>
-      <Typography variant='h6'> Registrujte sa, aby ste mohli pridať príspevky a zobraziť profil. </Typography>
+    <Container
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        textAlign: "center",
+        p: 3,
+        bgcolor: "background.default",
+      }}
+    >
+      <Typography variant="h3" sx={{ fontWeight: "bold", mb: 2 }}>
+        Vitajte na ZoškaSnap!
+      </Typography>
+      <Typography variant="h5" sx={{ mb: 3, color: "text.secondary" }}>
+        Pre začatie používania našej aplikácie, prosím, vytvorte si účet.
+      </Typography>
+      <HomeView />
     </Container>
   );
 }

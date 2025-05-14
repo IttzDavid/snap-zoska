@@ -41,7 +41,7 @@ export default function PostCard({
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false); // NEW
   const router = useRouter(); // NEW
 
-  const customAvatar = (post.user as any).avatarUrl as string | null;
+  const customAvatar = post.user.avatarUrl as string | null;
   const providerAvatar = post.user.image;
   const avatarSrc = customAvatar || providerAvatar || undefined;
   const initials =
@@ -53,7 +53,7 @@ export default function PostCard({
   // 🔥 DELETE POST HANDLER
   const handleDelete = async () => {
     try {
-      const response = await fetch(`/api/post/${post}`, {
+      const response = await fetch(`/api/post/${post.id}`, {
         method: "DELETE",
       });
 

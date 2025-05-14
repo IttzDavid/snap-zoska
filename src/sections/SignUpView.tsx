@@ -99,6 +99,7 @@ export default function SignUpView() {
 
       {/* GitHub Sign Up */}
       <Button
+      className="github-button"
         variant="contained"
         fullWidth
         startIcon={<GitHubIcon />}

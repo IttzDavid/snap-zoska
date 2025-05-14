@@ -10,8 +10,6 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
-  Typography,
-  ListItemText,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import SearchIcon from "@mui/icons-material/Search";
@@ -50,7 +48,7 @@ export default function Navbar() {
     })();
   }, [status]);
 
-  const handleNavigation = (_: any, newValue: string) => {
+  const handleNavigation = (_event: React.SyntheticEvent, newValue: string) => {
     if (newValue === "#") {
       const anchor = document.getElementById("account-menu-anchor");
       if (anchor) {
